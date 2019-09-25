@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style type="text/css">
+    body {
+      margin:0;
+    }
+    #main {
+      position:absolute;
+      height:100vh;
+      width:100vw;
+      background-color:black;
+    }
+    .line{
+      width: 50px;
+      height: 2px;
+      background-color: white;
+      position: absolute;
+      top:0px;
+      left:50px;
+      
+      
+    }
+  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+
+  <div id="main"></div>
+  <div class="line"></div>
+  
+<script type="text/javascript">
+  const len = 200;
+  const getpos = (elm) => {
+    const rect = elm.getBoundingClientRect();
+    const str2num = str => parseInt(str.slice(0,-2));
+    const x = str2num(elm.style['left']) + len / 2;
+    const y = str2num(elm.style.top);
+    console.log({x,y});
+    return {x,y};
+  }
+  const setpos = (elm,x,y) => {
+    elm.style.left = `${x - len / 2}px`;
+    elm.style.top = `${y}px`
+  }
+  const universe = document.querySelector('#main');
+  const line = document.querySelector('.line');
+  line.style['width'] = `${len}px`;
+  line.style['left'] = '5px';
+  line.style['top'] = '5px';
+  
+  setTimeout( e=> {
+    setpos(line,100,100)
+  },3000)
+  
+  var start = null;
+  var dkwtd = 2000;
+  var slope = 0;
+  getpos(line);
+  function doStuff() {
+    line.style.transform = `rotate(${slope}deg)`;
+    slope = slope + 0.5;
+    if (slope===360) {
+      slope = 0;
+    }
+  }
+
+  function step(timestamp) {
+    if (!start) start = timestamp;
+    var progress = timestamp - start;
+    doStuff();
+    window.requestAnimationFrame(step);
+   /* if (progress < dkwtd) {
+      window.requestAnimationFrame(step);
+    } */
+  }
+
+  window.requestAnimationFrame(step);
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</script>
+</body>
+</html>
