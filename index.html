@@ -1,113 +1,139 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <style type="text/css">
-    html,body{ margin:0; padding:0; height:100%; width:100%; }
-    .full-size{
-      height:100%;
-      width:100%;
-      overflow:hidden; /* or overflow:auto; if you want scrollbars */
-    }
-    #main {
-      background-color:black;
-    }
-    .line{
-      width: 50px;
-      height: 2px;
-      background-color: white;
-      position: fixed;
-      top:0px;
-      left:-25px;
-      overflow:hidden;
-      transform:rotate(25deg)
-    }
-  </style>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>JS Bin</title>
-</head>
-<body>
 
-  <div id="main" class="full-size" >
-      <div class="line"></div> 
-  </div>
-  
-<script type="text/javascript">
-  const floor = num => num << 0;
-  const str2num = str => parseInt(str.slice(0,-2));
-  const vw = window.innerWidth || 2000;
-  const vh = window.innerHeight || 2000;
-  const len = vh+vw;
-  const getpos = (elm) => {
-    const rect = elm.getBoundingClientRect();
-    const x = str2num(elm.style.left) + floor(len / 2);
-    const y = str2num(elm.style.top);
-    console.log({x,y});
-    return {x,y};
-  }
-  const setpos = (elm,x,y) => {
-    elm.style.left = `${x - floor(len / 2)}px`;
-    elm.style.top = `${y}px`
-  }
-  const universe = document.querySelector('#main');
-  const line = document.querySelector('.line');
-  line.style['width'] = `${len}px`;
-  line.style['left'] = '0px';
-  line.style['top'] = '0px';
-  line.style['overflow'] = 'hidden';
-    getpos(line);
-  setpos(line,floor(vw/2),floor(vh/2));
-    //setpos(line,0,0);
+  <head>
+    <style type="text/css">
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
 
-    getpos(line);
+      .full-size {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        /* or overflow:auto; if you want scrollbars */
+      }
 
-  
-  var start = null;
-  var slope = 0;
-  function doStuff() {
-    line.style.transform = `rotate(${slope}deg)`;
-    slope = slope + 0.5;
-    if (slope===360) {
-      slope = 0;
-    }
-  }
+      #main {
+        background-color: black;
+      }
 
-  function step(timestamp) {
-    if (!start) start = timestamp;
-    var progress = timestamp - start;
-    doStuff();
-    window.requestAnimationFrame(step);
-   /* if (progress < dkwtd) {
+      .line {
+        width: 50px;
+        height: 2px;
+        background-color: white;
+        position: fixed;
+        top: 0px;
+        left: -25px;
+        overflow: hidden;
+        transform: rotate(25deg)
+      }
+
+      .dot {
+        position: fixed;
+        height: 10px;
+        width: 10px;
+        background-color: pink;
+        transform: translate(-50%, -50%);
+        border-radius: 100%;
+      }
+
+    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>JS Bin</title>
+  </head>
+
+  <body>
+
+    <div id="main" class="full-size">
+      <div class="line"></div>
+    </div>
+
+    <script type="text/javascript">
+      const floor = num => num << 0;
+      const str2num = str => parseInt(str.slice(0, -2));
+      const vw = window.innerWidth || 2000;
+      const vh = window.innerHeight || 2000;
+      const len = vh + vw;
+      const dots = [];
+      const getpos = (elm) => {
+        const rect = elm.getBoundingClientRect();
+        const x = str2num(elm.style.left) + floor(len / 2);
+        const y = str2num(elm.style.top);
+        console.log({
+          x,
+          y
+        });
+        return {
+          x,
+          y
+        };
+      }
+      const setpos = (elm, x, y) => {
+        elm.style.left = `${x - floor(len / 2)}px`;
+        elm.style.top = `${y}px`
+      }
+      const universe = document.querySelector('#main');
+      const line = document.querySelector('.line');
+      line.style['width'] = `${len}px`;
+      line.style['left'] = '0px';
+      line.style['top'] = '0px';
+      line.style['overflow'] = 'hidden';
+      getpos(line);
+      setpos(line, floor(vw / 2), floor(vh / 2));
+      //setpos(line,0,0);
+
+      getpos(line);
+
+
+      var start = null;
+      var slope = 0;
+
+      function doStuff() {
+        line.style.transform = `rotate(${slope}deg)`;
+        slope = slope + 0.5;
+        if (slope === 360) {
+          slope = 0;
+        }
+      }
+
+      function step(timestamp) {
+        if (!start) start = timestamp;
+        var progress = timestamp - start;
+        doStuff();
+        window.requestAnimationFrame(step);
+        /* if (progress < dkwtd) {
+           window.requestAnimationFrame(step);
+         } */
+      }
+
       window.requestAnimationFrame(step);
-    } */
-  }
 
-  window.requestAnimationFrame(step);
-  
-   
- 
-  
- const clickOrTap = (event) => {
-   setpos(line,event.clientX,event.clientY);
-}
 
-document.addEventListener("click", clickOrTap);
- 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-</script>
-</body>
+      const makeDot = (parent, x, y) => {
+        const newDot = document.createElement("div");
+        newDot.style.left = `${x}px`;
+        newDot.style.top = `${y}px`;
+        newDot.className = "dot";
+        parent.appendChild(newDot);
+        dots.push(x, y);
+
+      }
+
+
+      const clickOrTap = (event) => {
+        makeDot(universe, event.clientX, event.clientY);
+        setpos(line, event.clientX, event.clientY);
+      }
+
+      document.addEventListener("click", clickOrTap);
+
+    </script>
+  </body>
+
 </html>
