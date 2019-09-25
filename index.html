@@ -59,7 +59,7 @@
       const str2num = str => parseInt(str.slice(0, -2));
       const vw = window.innerWidth || 2000;
       const vh = window.innerHeight || 2000;
-      const len = vh + vw;
+      const len = 3 * ( vh + vw );
       const dots = [];
       const getpos = (elm) => {
         const rect = elm.getBoundingClientRect();
