@@ -2,22 +2,24 @@
 <html>
 <head>
   <style type="text/css">
-    body {
-      margin:0;
+    html,body{ margin:0; padding:0; height:100%; width:100%; }
+    .full-size{
+      height:100%;
+      width:100%;
+      overflow:hidden; /* or overflow:auto; if you want scrollbars */
     }
     #main {
-      position:absolute;
-      height:100vh;
-      width:100vw;
       background-color:black;
     }
     .line{
       width: 50px;
       height: 2px;
       background-color: white;
-      position: absolute;
+      position: fixed;
       top:0px;
-      left:50px;
+      left:-25px;
+      overflow:hidden;
+      transform:rotate(25deg)
     }
   </style>
   <meta charset="utf-8">
@@ -26,25 +28,25 @@
 </head>
 <body>
 
-  <div id="main">
-      <div class="line"></div>
+  <div id="main" class="full-size" >
+      <div class="line"></div> 
   </div>
   
 <script type="text/javascript">
   const floor = num => num << 0;
-  const vh = window.innerWidth || 2000;
-  const vw = window.innerHeight || 2000;
+  const str2num = str => parseInt(str.slice(0,-2));
+  const vw = window.innerWidth || 2000;
+  const vh = window.innerHeight || 2000;
   const len = vh+vw;
   const getpos = (elm) => {
     const rect = elm.getBoundingClientRect();
-    const str2num = str => parseInt(str.slice(0,-2));
-    const x = str2num(elm.style['left']) + len / 2;
+    const x = str2num(elm.style.left) + floor(len / 2);
     const y = str2num(elm.style.top);
     console.log({x,y});
     return {x,y};
   }
   const setpos = (elm,x,y) => {
-    elm.style.left = `${x - len / 2}px`;
+    elm.style.left = `${x - floor(len / 2)}px`;
     elm.style.top = `${y}px`
   }
   const universe = document.querySelector('#main');
@@ -52,13 +54,16 @@
   line.style['width'] = `${len}px`;
   line.style['left'] = '0px';
   line.style['top'] = '0px';
-  
+  line.style['overflow'] = 'hidden';
+    getpos(line);
   setpos(line,floor(vw/2),floor(vh/2));
+    //setpos(line,0,0);
+
+    getpos(line);
+
   
   var start = null;
-  var dkwtd = 2000;
   var slope = 0;
-  getpos(line);
   function doStuff() {
     line.style.transform = `rotate(${slope}deg)`;
     slope = slope + 0.5;
@@ -79,11 +84,15 @@
 
   window.requestAnimationFrame(step);
   
+   
+ 
   
-  
-  
-  
-  
+ const clickOrTap = (event) => {
+   setpos(line,event.clientX,event.clientY);
+}
+
+document.addEventListener("click", clickOrTap);
+ 
   
   
   
