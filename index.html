@@ -18,8 +18,6 @@
       position: absolute;
       top:0px;
       left:50px;
-      
-      
     }
   </style>
   <meta charset="utf-8">
@@ -28,11 +26,15 @@
 </head>
 <body>
 
-  <div id="main"></div>
-  <div class="line"></div>
+  <div id="main">
+      <div class="line"></div>
+  </div>
   
 <script type="text/javascript">
-  const len = 200;
+  const floor = num => num << 0;
+  const vh = window.innerWidth || 2000;
+  const vw = window.innerHeight || 2000;
+  const len = vh+vw;
   const getpos = (elm) => {
     const rect = elm.getBoundingClientRect();
     const str2num = str => parseInt(str.slice(0,-2));
@@ -48,12 +50,10 @@
   const universe = document.querySelector('#main');
   const line = document.querySelector('.line');
   line.style['width'] = `${len}px`;
-  line.style['left'] = '5px';
-  line.style['top'] = '5px';
+  line.style['left'] = '0px';
+  line.style['top'] = '0px';
   
-  setTimeout( e=> {
-    setpos(line,100,100)
-  },3000)
+  setpos(line,floor(vw/2),floor(vh/2));
   
   var start = null;
   var dkwtd = 2000;
