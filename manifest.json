@@ -1,0 +1,8 @@
+{
+  "name": "Windmill Simulation",
+  "short_name": "Windmill",
+  "lang": "en-US",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#FF69B4"
+}
