@@ -2,6 +2,18 @@
   "name": "Windmill Simulation",
   "short_name": "Windmill",
   "lang": "en-US",
+  "icons": [
+    {
+      "src": "/windmill/icon192X192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/windmill/icons512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
   "start_url": "/windmill/",
   "display": "standalone",
   "theme_color": "#FF69B4"
