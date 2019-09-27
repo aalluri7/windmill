@@ -21,9 +21,10 @@ const RUNTIME = 'runtime';
 const PRECACHE_URLS = [
   '/windmill/index.html',
   '/windmill/icon.png',
-  '/windmill/icon192X192.png',
-  '/windmill/icon512X512.png',
-  '/windmill'
+  '/windmill/icon192x192.png',
+  '/windmill/icon512x512.png',
+  '/windmill',
+  '/windmill/
 ];
 
 // The install handler takes care of precaching the resources we always need.
