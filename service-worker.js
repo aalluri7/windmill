@@ -19,9 +19,11 @@ const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
-  '/windmill/ndex.html',
-  '/windmill/icon.png'
-  '/'
+  '/windmill/index.html',
+  '/windmill/icon.png',
+  '/windmill/icon192X192.png',
+  '/windmill/icon512X512.png',
+  '/windmill'
 ];
 
 // The install handler takes care of precaching the resources we always need.
