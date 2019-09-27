@@ -4,7 +4,7 @@
   "lang": "en-US",
   "icons": [
     {
-      "src": "/windmill/icon192X192.png",
+      "src": "/windmill/icon192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
