@@ -123,6 +123,7 @@
         const tryslope = shouldUseislope ? islope : slope;
         if (tryslope > nextDotDeg && (tryslope - 1) < nextDotDeg) {
           setpos(line, nextDot.x, nextDot.y);
+          if ( navigator.vibrate ){ navigator.vibrate([100]) }
           const p1 = getpos(line);
           let pdiff = 0;
           let digs = [];
