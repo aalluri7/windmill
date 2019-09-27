@@ -16,5 +16,6 @@
   ],
   "start_url": "/windmill/",
   "display": "standalone",
-  "theme_color": "#FF69B4"
+  "theme_color": "#FF69B4",
+  "background_color": "#FF69B4",
 }
