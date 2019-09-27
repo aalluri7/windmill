@@ -43,17 +43,17 @@
       }
 
     </style>
-<link rel="manifest" href="/windmill/manifest.json">
+    <link rel="manifest" href="/windmill/manifest.json">
 
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="application-name" content="Windmill">
-<meta name="apple-mobile-web-app-title" content="Windmill">
-<meta name="theme-color" content="#FF69B4">
-<meta name="msapplication-navbutton-color" content="#FF69B4">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="msapplication-starturl" content="/windmill">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Windmill">
+    <meta name="apple-mobile-web-app-title" content="Windmill">
+    <meta name="theme-color" content="#FF69B4">
+    <meta name="msapplication-navbutton-color" content="#FF69B4">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-starturl" content="/windmill">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta charset="utf-8">
     <title>Windmill Simulation</title>
   </head>
@@ -69,16 +69,12 @@
       const str2num = str => parseInt(str.slice(0, -2));
       const vw = window.innerWidth || 2000;
       const vh = window.innerHeight || 2000;
-      const len = 3 * ( vh + vw );
+      const len = 3 * (vh + vw);
       const dots = [];
       const getpos = (elm) => {
         const rect = elm.getBoundingClientRect();
         const x = str2num(elm.style.left) + floor(len / 2);
         const y = str2num(elm.style.top);
-        console.log({
-          x,
-          y
-        });
         return {
           x,
           y
@@ -103,13 +99,69 @@
 
       var start = null;
       var slope = 0;
+      var nextDot;
+      var nextDotDeg = 365;
+
+      var tic = 0;
 
       function doStuff() {
-        line.style.transform = `rotate(${slope}deg)`;
+        /*         console.log({
+                  nextDotDeg,
+                  slope,
+                  nextDotDeg,
+                  t: Date.now()
+                }); */
+
+        if (slope > nextDotDeg && (slope - 1) < nextDotDeg) {
+          setpos(line, nextDot.x, nextDot.y);
+          const p1 = getpos(line);
+          let pdiff = 0;
+          let digs = [];
+          dots.forEach(p2 => {
+            if (p1.x == p2.x && p1.y == p2.y) {
+
+            } else {
+              let pointDegs = Math.atan2((p2.y * -1) - (p1.y * -1), p2.x - p1.x) * 180 / Math.PI;
+              if (pointDegs < 0) {
+                pointDegs = 360 + pointDegs;
+              }
+              digs.push({
+                d: pointDegs,
+                p: p2
+              });
+            }
+
+          });
+          digs.sort((a, b) => a.d - b.d);
+          let potentialdig = 'false';
+          let potentialdot = 'false';
+          for (const dig of digs) {
+            if (slope < dig.d) {
+              potentialdig = dig.d;
+              potentialdot = dig.p;
+              break;
+            }
+          }
+          if (potentialdig === 'false' && digs[0]) {
+            nextDotDeg = digs[0].d
+            nextDot = digs[0].p;
+          } else {
+            nextDotDeg = potentialdig
+            nextDot = potentialdot;
+          }
+
+          console.log({
+            nextDotDeg,
+            digs
+          })
+
+        }
+        line.style.transform = `rotate(${ 360 - slope}deg)`;
         slope = slope + 0.5;
         if (slope === 360) {
           slope = 0;
         }
+        // console.log({slope,nextDotDeg})
       }
 
       function step(timestamp) {
@@ -131,14 +183,58 @@
         newDot.style.top = `${y}px`;
         newDot.className = "dot";
         parent.appendChild(newDot);
-        dots.push(x, y);
+        dots.push({
+          x,
+          y
+        });
+        console.log({
+          dots
+        });
+        const p1 = getpos(line);
+        let pdiff = 0;
+        let digs = [];
+        dots.forEach(p2 => {
+          if (p1.x == p2.x && p1.y == p2.y) {
 
+          } else {
+            let pointDegs = Math.atan2((p2.y * -1) - (p1.y * -1), p2.x - p1.x) * 180 / Math.PI;
+            if (pointDegs < 0) {
+              pointDegs = 360 + pointDegs;
+            }
+            digs.push({
+              d: pointDegs,
+              p: p2
+            });
+          }
+
+        });
+        digs.sort((a, b) => a.d - b.d);
+        let potentialdig = 'false';
+        let potentialdot = 'false';
+        for (const dig of digs) {
+          if (slope < dig.d) {
+            potentialdig = dig.d;
+            potentialdot = dig.p;
+            break;
+          }
+        }
+        if (potentialdig === 'false' && digs[0]) {
+          nextDotDeg = digs[0].d
+          nextDot = digs[0].p;
+        } else {
+          nextDotDeg = potentialdig
+          nextDot = potentialdot;
+        }
+
+        console.log({
+          nextDotDeg,
+          digs
+        })
       }
 
 
       const clickOrTap = (event) => {
         makeDot(universe, event.clientX, event.clientY);
-        setpos(line, event.clientX, event.clientY);
       }
 
       document.addEventListener("click", clickOrTap);
