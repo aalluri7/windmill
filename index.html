@@ -25,7 +25,7 @@
       .line {
         width: 50px;
         height: 2px;
-        background-color: white;
+        background: linear-gradient(90deg, red 50%, blue 50%);
         position: fixed;
         top: 0px;
         left: -25px;
@@ -99,6 +99,7 @@
 
       var start = null;
       var slope = 0;
+      var shouldUseislope = false;
       var nextDot;
       var nextDotDeg = 365;
 
@@ -112,7 +113,14 @@
                   t: Date.now()
                 }); */
 
-        if (slope > nextDotDeg && (slope - 1) < nextDotDeg) {
+        let islope = slope + 180;
+        if (islope < 0) {
+          islope = 360 + islope;
+        } else if (islope > 360) {
+          islope = islope - 360;
+        }
+        const tryslope = shouldUseislope ? islope : slope;
+        if (tryslope > nextDotDeg && (tryslope - 1) < nextDotDeg) {
           setpos(line, nextDot.x, nextDot.y);
           const p1 = getpos(line);
           let pdiff = 0;
@@ -135,6 +143,8 @@
           digs.sort((a, b) => a.d - b.d);
           let potentialdig = 'false';
           let potentialdot = 'false';
+          let pdig;
+          let pdot;
           for (const dig of digs) {
             if (slope < dig.d) {
               potentialdig = dig.d;
@@ -142,17 +152,63 @@
               break;
             }
           }
+
           if (potentialdig === 'false' && digs[0]) {
-            nextDotDeg = digs[0].d
-            nextDot = digs[0].p;
+            pdig = digs[0].d
+            pdot = digs[0].p;
           } else {
-            nextDotDeg = potentialdig
-            nextDot = potentialdot;
+            pdig = potentialdig
+            pdot = potentialdot;
           }
+
+
+          let islope = slope + 180;
+          if (islope < 0) {
+            islope = 360 + islope;
+          } else if (islope > 360) {
+            islope = islope - 360;
+          }
+          let ipotentialdig = 'false';
+          let ipotentialdot = 'false';
+          let ipdig;
+          let ipdot;
+          for (const dig of digs) {
+
+            if (islope < dig.d) {
+              ipotentialdig = dig.d;
+              ipotentialdot = dig.p;
+              break;
+            }
+          }
+
+          if (ipotentialdig === 'false' && digs[0]) {
+            ipdig = digs[0].d
+            ipdot = digs[0].p;
+          } else {
+            ipdig = ipotentialdig
+            ipdot = ipotentialdot;
+          }
+          let sdif = (pdig - slope < 0) ? pdig + (360 - slope) : pdig - slope;
+          let isdif = (ipdig - islope < 0) ? ipdig + (360 - islope) : ipdig - islope;
+
+          if (sdif > isdif) {
+            nextDotDeg = ipdig;
+            nextDot = ipdot;
+            shouldUseislope = true;
+          } else {
+            nextDotDeg = pdig;
+            nextDot = pdot;
+            shouldUseislope = false;
+          }
+
+
 
           console.log({
             nextDotDeg,
-            digs
+            nextDot,
+            shouldUseislope,
+            slope,
+            islope,
           })
 
         }
@@ -211,6 +267,8 @@
         digs.sort((a, b) => a.d - b.d);
         let potentialdig = 'false';
         let potentialdot = 'false';
+        let pdig;
+        let pdot;
         for (const dig of digs) {
           if (slope < dig.d) {
             potentialdig = dig.d;
@@ -218,17 +276,62 @@
             break;
           }
         }
+
         if (potentialdig === 'false' && digs[0]) {
-          nextDotDeg = digs[0].d
-          nextDot = digs[0].p;
+          pdig = digs[0].d
+          pdot = digs[0].p;
         } else {
-          nextDotDeg = potentialdig
-          nextDot = potentialdot;
+          pdig = potentialdig
+          pdot = potentialdot;
         }
+
+
+        let islope = slope + 180;
+        if (islope < 0) {
+          islope = 360 + islope;
+        } else if (islope > 360) {
+          islope = islope - 360;
+        }
+        let ipotentialdig = 'false';
+        let ipotentialdot = 'false';
+        let ipdig;
+        let ipdot;
+        for (const dig of digs) {
+
+          if (islope < dig.d) {
+            ipotentialdig = dig.d;
+            ipotentialdot = dig.p;
+            break;
+          }
+        }
+
+        if (ipotentialdig === 'false' && digs[0]) {
+          ipdig = digs[0].d
+          ipdot = digs[0].p;
+        } else {
+          ipdig = ipotentialdig
+          ipdot = ipotentialdot;
+        }
+        let sdif = (pdig - slope < 0) ? pdig + (360 - slope) : pdig - slope;
+        let isdif = (ipdig - islope < 0) ? ipdig + (360 - islope) : ipdig - islope;
+
+        if (sdif > isdif) {
+          nextDotDeg = ipdig;
+          nextDot = ipdot;
+          shouldUseislope = true;
+        } else {
+          nextDotDeg = pdig;
+          nextDot = pdot;
+          shouldUseislope = false;
+        }
+
 
         console.log({
           nextDotDeg,
-          digs
+          nextDot,
+          shouldUseislope,
+          slope,
+          islope,
         })
       }
 
