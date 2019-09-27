@@ -101,34 +101,58 @@
       var slope = 0;
       var nextDot;
       var nextDotDeg = 365;
-      
-      var tic = 0 ;
-      
-      function doStuff() {
-               console.log({nextDotDeg,slope,nextDotDeg,t:Date.now()});
 
-        if (slope > nextDotDeg && (slope -1) < nextDotDeg) {
-debugger;
-setpos(line, nextDot.x, nextDot.y);
-          nextDotDeg = 360;
+      var tic = 0;
+
+      function doStuff() {
+        /*         console.log({
+                  nextDotDeg,
+                  slope,
+                  nextDotDeg,
+                  t: Date.now()
+                }); */
+
+        if (slope > nextDotDeg && (slope - 1) < nextDotDeg) {
+          setpos(line, nextDot.x, nextDot.y);
           const p1 = getpos(line);
-          let pdiff = 365;
+          let pdiff = 0;
+          let digs = [];
           dots.forEach(p2 => {
             if (p1.x == p2.x && p1.y == p2.y) {
 
             } else {
-          let pointDegs = Math.atan2((p2.y * -1 ) - (p1.y * -1 ), p2.x - p1.x) * 180 / Math.PI;
+              let pointDegs = Math.atan2((p2.y * -1) - (p1.y * -1), p2.x - p1.x) * 180 / Math.PI;
               if (pointDegs < 0) {
                 pointDegs = 360 + pointDegs;
               }
-              const diff = Math.abs(pointDegs - slope);
-              if (diff <= pdiff) {
-                nextDotDeg = pointDegs;
-                pdiff = diff;
-                nextDot = p2;
-              }
+              digs.push({
+                d: pointDegs,
+                p: p2
+              });
             }
 
+          });
+          digs.sort((a, b) => a.d - b.d);
+          let potentialdig = 'false';
+          let potentialdot = 'false';
+          for (const dig of digs) {
+            if (slope < dig.d) {
+              potentialdig = dig.d;
+              potentialdot = dig.p;
+              break;
+            }
+          }
+          if (potentialdig === 'false' && digs[0]) {
+            nextDotDeg = digs[0].d
+            nextDot = digs[0].p;
+          } else {
+            nextDotDeg = potentialdig
+            nextDot = potentialdot;
+          }
+
+          console.log({
+            nextDotDeg,
+            digs
           })
 
         }
@@ -163,30 +187,49 @@ setpos(line, nextDot.x, nextDot.y);
           x,
           y
         });
+        console.log({
+          dots
+        });
         const p1 = getpos(line);
-        let pdiff = 365;
+        let pdiff = 0;
+        let digs = [];
         dots.forEach(p2 => {
-          console.log({
-            p1,
-            p2
-          })
-          let pointDegs =  Math.atan2((p2.y * -1) - (p1.y * -1 ), p2.x - p1.x) * 180 / Math.PI;
-          if (pointDegs < 0) {
-            pointDegs = 360 + pointDegs;
+          if (p1.x == p2.x && p1.y == p2.y) {
+
+          } else {
+            let pointDegs = Math.atan2((p2.y * -1) - (p1.y * -1), p2.x - p1.x) * 180 / Math.PI;
+            if (pointDegs < 0) {
+              pointDegs = 360 + pointDegs;
+            }
+            digs.push({
+              d: pointDegs,
+              p: p2
+            });
           }
-          const diff = Math.abs(pointDegs - slope);
-          console.log({
-            diff,
-            pointDegs,
-            slope
-          })
-          if (diff <= pdiff) {
-            nextDotDeg = pointDegs;
-            nextDot = p2;
+
+        });
+        digs.sort((a, b) => a.d - b.d);
+        let potentialdig = 'false';
+        let potentialdot = 'false';
+        for (const dig of digs) {
+          if (slope < dig.d) {
+            potentialdig = dig.d;
+            potentialdot = dig.p;
+            break;
           }
+        }
+        if (potentialdig === 'false' && digs[0]) {
+          nextDotDeg = digs[0].d
+          nextDot = digs[0].p;
+        } else {
+          nextDotDeg = potentialdig
+          nextDot = potentialdot;
+        }
+
+        console.log({
+          nextDotDeg,
+          digs
         })
-        console.log({nextDotDeg})
-        debugger;
       }
 
 
