@@ -24,7 +24,7 @@ const PRECACHE_URLS = [
   '/windmill/icon192x192.png',
   '/windmill/icon512x512.png',
   '/windmill',
-  '/windmill/
+  '/windmill/'
 ];
 
 // The install handler takes care of precaching the resources we always need.
