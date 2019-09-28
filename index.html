@@ -123,12 +123,6 @@
       var tic = 0;
 
       function doStuff() {
-        /*         console.log({
-                  nextDotDeg,
-                  slope,
-                  nextDotDeg,
-                  t: Date.now()
-                }); */
 
         let islope = slope + 180;
         if (islope < 0) {
@@ -238,7 +232,6 @@
         if (slope === 360) {
           slope = 0;
         }
-        // console.log({slope,nextDotDeg})
       }
 
       function step(timestamp) {
@@ -263,7 +256,7 @@
         dots[`${x},${y}`] = {
           x,
           y,
-          ref:newDot
+          ref: newDot
         }
         console.log({
           dots
@@ -360,7 +353,7 @@
       var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
       const clickOrTap = (event) => {
-        makeDot(universe, event.clientX, event.clientY);
+        makeDot(universe, event.clientX || event.pageX, event.clientY || event.pageY);
       }
 
       var clickortouch = (iOS && 'ontouchstart' in window) ? 'touchstart' : 'click';
