@@ -149,7 +149,7 @@
         const tryslope = shouldUseislope ? islope : slope;
         const linebuffer = tryslope - .6;
 
-        const shouldPivot = tryslope == .5 && nextDotDeg < 360 && nextDotDeg > 359;
+        const shouldPivot = tryslope == 0 && nextDotDeg < 360 && nextDotDeg > 359;
         if (shouldPivot || tryslope >= nextDotDeg && linebuffer < nextDotDeg) {
           setpos(line, nextDot.x, nextDot.y);
           nextDot.ref.className = "hit";
