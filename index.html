@@ -26,7 +26,7 @@
         width: 50px;
         height: 2px;
         background-color: white;
-       /* background: linear-gradient(90deg, red 50%, blue 50%); */
+        /* background: linear-gradient(90deg, red 50%, blue 50%); */
         position: fixed;
         top: 0px;
         left: -25px;
@@ -66,9 +66,9 @@
     </div>
 
     <script type="text/javascript">
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/windmill/service-worker.js');
-}
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/windmill/service-worker.js');
+      }
 
 
       const floor = num => num << 0;
@@ -108,6 +108,7 @@ if ('serviceWorker' in navigator) {
       var shouldUseislope = false;
       var nextDot;
       var nextDotDeg = 365;
+      var digs = [];
 
       var tic = 0;
 
@@ -126,12 +127,14 @@ if ('serviceWorker' in navigator) {
           islope = islope - 360;
         }
         const tryslope = shouldUseislope ? islope : slope;
-        if (tryslope > nextDotDeg && (tryslope - 1) < nextDotDeg) {
+        if (tryslope >= nextDotDeg && (tryslope - 1) < nextDotDeg) {
           setpos(line, nextDot.x, nextDot.y);
-          if ( navigator.vibrate ){ navigator.vibrate([100]) }
+          if (navigator.vibrate) {
+            navigator.vibrate([100])
+          }
           const p1 = getpos(line);
           let pdiff = 0;
-          let digs = [];
+          digs = [];
           dots.forEach(p2 => {
             if (p1.x == p2.x && p1.y == p2.y) {
 
@@ -255,7 +258,7 @@ if ('serviceWorker' in navigator) {
         });
         const p1 = getpos(line);
         let pdiff = 0;
-        let digs = [];
+        digs = [];
         dots.forEach(p2 => {
           if (p1.x == p2.x && p1.y == p2.y) {
 
@@ -342,26 +345,27 @@ if ('serviceWorker' in navigator) {
         })
       }
 
+      var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
       const clickOrTap = (event) => {
         makeDot(universe, event.clientX, event.clientY);
       }
 
-      document.addEventListener("click", clickOrTap);
+      var clickortouch = (iOS && 'ontouchstart' in window) ? 'touchstart' : 'click';
+      document.addEventListener(clickortouch, clickOrTap);
 
     </script>
 
-<!-- Default Statcounter code for Windmill Simulation
+    <!-- Default Statcounter code for Windmill Simulation
 https://aalluri7.github.io/windmill/ -->
-<script type="text/javascript">
-var sc_project=12110059; 
-var sc_invisible=1; 
-var sc_security="eebfd5b0"; 
-</script>
-<script type="text/javascript"
-src="https://www.statcounter.com/counter/counter.js"
-async></script>
-<!-- End of Statcounter Code -->
+    <script type="text/javascript">
+      var sc_project = 12110059;
+      var sc_invisible = 1;
+      var sc_security = "eebfd5b0";
+
+    </script>
+    <script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
+    <!-- End of Statcounter Code -->
   </body>
 
 </html>
