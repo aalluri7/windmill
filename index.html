@@ -34,6 +34,15 @@
         transform: rotate(25deg)
       }
 
+      .hit {
+        position: fixed;
+        height: 10px;
+        width: 10px;
+        background-color: green;
+        transform: translate(-50%, -50%);
+        border-radius: 100%;
+      }
+
       .dot {
         position: fixed;
         height: 10px;
@@ -76,7 +85,7 @@
       const vw = window.innerWidth || 2000;
       const vh = window.innerHeight || 2000;
       const len = 3 * (vh + vw);
-      const dots = [];
+      const dots = {};
       const getpos = (elm) => {
         const rect = elm.getBoundingClientRect();
         const x = str2num(elm.style.left) + floor(len / 2);
@@ -109,6 +118,7 @@
       var nextDot;
       var nextDotDeg = 365;
       var digs = [];
+      var curDot;
 
       var tic = 0;
 
@@ -129,13 +139,14 @@
         const tryslope = shouldUseislope ? islope : slope;
         if (tryslope >= nextDotDeg && (tryslope - 1) < nextDotDeg) {
           setpos(line, nextDot.x, nextDot.y);
+          nextDot.ref.className = "hit";
           if (navigator.vibrate) {
             navigator.vibrate([100])
           }
           const p1 = getpos(line);
           let pdiff = 0;
           digs = [];
-          dots.forEach(p2 => {
+          Object.values(dots).forEach(p2 => {
             if (p1.x == p2.x && p1.y == p2.y) {
 
             } else {
@@ -249,17 +260,18 @@
         newDot.style.top = `${y}px`;
         newDot.className = "dot";
         parent.appendChild(newDot);
-        dots.push({
+        dots[`${x},${y}`] = {
           x,
-          y
-        });
+          y,
+          ref:newDot
+        }
         console.log({
           dots
         });
         const p1 = getpos(line);
         let pdiff = 0;
         digs = [];
-        dots.forEach(p2 => {
+        Object.values(dots).forEach(p2 => {
           if (p1.x == p2.x && p1.y == p2.y) {
 
           } else {
